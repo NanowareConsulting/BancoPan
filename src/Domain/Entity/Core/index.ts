@@ -3,7 +3,7 @@ import { v4 as uuid, validate } from "uuid";
 import { EntityError } from "../Error";
 
 export class Entity {
-  public readonly id: string;
+  private readonly id: string;
 
   constructor(id?: string) {
     if (id) {
@@ -14,5 +14,9 @@ export class Entity {
     } else {
       this.id = uuid();
     }
+  }
+
+  get getId(): string {
+    return this.id;
   }
 }
