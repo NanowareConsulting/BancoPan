@@ -1,5 +1,5 @@
 import { IUserRepository } from "@/Adapter";
-import { User } from "@/Domain";
+import { Email, Name, Password, User } from "@/Domain";
 import { Left, Right } from "@/Utils/Either";
 
 import {
@@ -12,20 +12,34 @@ export class UCRegisterUser implements IRegisterUser {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(data: RegisterUserRequest): Promise<RegisterUserResponse> {
-    const userOrError = User.create(data);
+    const name = Name.create(data.name);
+    const email = Email.create(data.email);
+    const password = Password.create(data.password);
 
-    if (userOrError.isLeft()) {
-      return new Left(userOrError.value);
+    if (name.isLeft()) {
+      return new Left(name.value);
     }
 
-    const user = userOrError.value;
-
-    const createdUserOrError = await this.userRepository.save(user);
-
-    if (createdUserOrError.isLeft()) {
-      return new Left(createdUserOrError.value);
+    if (email.isLeft()) {
+      return new Left(email.value);
     }
 
-    return new Right(undefined);
+    if (password.isLeft()) {
+      return new Left(password.value);
+    }
+
+    const user = User.create({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+
+    const userCreated = await this.userRepository.save(user);
+
+    if (userCreated.isLeft()) {
+      return new Left(userCreated.value);
+    }
+
+    return new Right(user.toJSON());
   }
 }
