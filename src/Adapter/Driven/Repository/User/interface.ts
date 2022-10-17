@@ -1,7 +1,6 @@
 import { User } from "@/Domain";
 
-import { Repo } from "../Core";
-
-export interface IUserRepo extends Repo<User> {
-  findByEmail(email: string): Promise<User>;
+export interface IUserRepo {
+  create(user: User): Promise<User>;
+  findByCpf(cpf: string): Promise<User>;
 }

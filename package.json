@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^4.3.1",
+    "@prisma/client": "^4.4.0",
     "@types/nodemailer": "^6.4.6",
     "bcrypt": "^5.0.1",
     "concurrently": "^7.4.0",
@@ -44,7 +44,8 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "dev": "concurrently \"dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application && cd src/Adapter/Driver/View && yarn dev\" \"cd src/Adapter/Driver/View && yarn dev\"",
+    "back:dev": "dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application",
+    "dev": "concurrently \"dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application\" \"cd src/Adapter/Driver/view && yarn dev\"",
     "test": "dotenv -e .env.test -- jest --maxWorkers=1"
   }
 }

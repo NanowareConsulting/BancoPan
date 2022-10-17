@@ -9,3 +9,61 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model OldUser {
+  id            String          @id
+  cpf           String          @unique
+  name          String
+  email         String          @unique
+  password      String
+  OldCreditCard OldCreditCard[]
+  OldLoan       OldLoan[]
+}
+
+model OldCreditCard {
+  id         String   @id
+  number     String   @unique
+  cvv        String
+  exp_date   DateTime
+  user_cpf   String
+  user       OldUser  @relation(fields: [user_cpf], references: [cpf])
+  user_email String
+}
+
+model OldLoan {
+  id         String  @id
+  amount     Float
+  interest   Float
+  total      Float
+  user_cpf   String
+  user       OldUser @relation(fields: [user_cpf], references: [cpf])
+  user_email String
+}
+
+model User {
+  id          String       @id
+  cpf         String       @unique
+  name        String
+  email       String       @unique
+  password    String
+  creditCards CreditCard[]
+  loans       Loan[]
+}
+
+model CreditCard {
+  id       String   @id
+  number   String   @unique
+  cvv      String
+  exp_date DateTime
+  user     User     @relation(fields: [userId], references: [id])
+  userId   String
+}
+
+model Loan {
+  id       String @id
+  amount   Float
+  interest Float
+  total    Float
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+}

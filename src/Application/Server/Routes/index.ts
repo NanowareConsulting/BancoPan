@@ -1,16 +1,40 @@
 import { Router } from "express";
 
-import { CTRLRegisterUser } from "@/Adapter";
-import { MockUserRepository } from "@/Adapter/Driven/Repository/User/mock";
-import { UCRegisterUser } from "@/Domain";
-
-const userRepo = new MockUserRepository();
-
-const registerUser = new UCRegisterUser(userRepo);
-const { handle: handleRegisterUser } = new CTRLRegisterUser(registerUser);
+import { PrismaUserRepo } from "@/Adapter";
+import {
+  CTRLApplyForOldCreditCard,
+  CTRLApplyForOldLoan,
+  CTRLGetOldCreditCards,
+  CTRLGetOldLoans,
+  CTRLGetOldUser,
+  CTRLLogInOldUser,
+  CTRLRegisterOldUser,
+  CTRLRegisterUser,
+  UCRegisterUser,
+} from "@/Domain";
 
 const router = Router();
 
-router.post("/register", handleRegisterUser);
+router.post("/register-old-user", new CTRLRegisterOldUser().handle);
+router.post(
+  "/apply-for-old-credit-card",
+  new CTRLApplyForOldCreditCard().handle
+);
+router.get("/get-old-user/:cpf", new CTRLGetOldUser().handle);
+router.get(
+  "/get-old-credit-card/:cpf",
+
+  new CTRLGetOldCreditCards().handle
+);
+router.post("/apply-for-old-loan", new CTRLApplyForOldLoan().handle);
+router.get("/get-old-loans/:cpf", new CTRLGetOldLoans().handle);
+router.post("/login-old-user", new CTRLLogInOldUser().handle);
+
+// Dependency Injection for new system
+
+const userRepo = new PrismaUserRepo();
+const registerUser = new UCRegisterUser(userRepo);
+
+router.post("/register-user", new CTRLRegisterUser(registerUser).execute);
 
 export default router;

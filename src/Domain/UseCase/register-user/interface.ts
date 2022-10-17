@@ -1,23 +1,17 @@
-import { RepositoryError } from "@/Adapter";
-import { EntityError } from "@/Domain/Entity/Core";
-import { Either } from "@/Utils/Either";
-
-export interface IRegisterUser {
-  execute(data: RegisterUserRequest): Promise<RegisterUserResponse>;
+export interface IUCRegisterUser {
+  execute: (data: IUCRegisterUserInput) => Promise<IUCRegisterUserOutput>;
 }
 
-export type RegisterUserRequest = {
+export interface IUCRegisterUserInput {
   name: string;
+  cpf: string;
   email: string;
   password: string;
-};
+}
 
-export type RegisterUserResponse = Either<
-  EntityError | RepositoryError,
-  {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-  }
->;
+export interface IUCRegisterUserOutput {
+  id: string;
+  name: string;
+  cpf: string;
+  email: string;
+}

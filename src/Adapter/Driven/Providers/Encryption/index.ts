@@ -1,2 +1,2 @@
-export * from "./implementation";
+export * from "./Bcrypt";
 export * from "./interface";

@@ -1,2 +1,4 @@
 export * from "./User";
-export * from "./Error";
+export * from "./OldUser";
+export * from "./OldLoan";
+export * from "./OldCreditCard";
