@@ -17,7 +17,12 @@ export type GetUserDataRequest = {
 export type GetUserDataResponse = Either<
   GetUserDataError.UserNotFound,
   {
-    user: OldUser;
+    user: {
+      id: string;
+      name: string;
+      cpf: string;
+      email: string;
+    };
     creditCards: OldCreditCard[];
     loans: OldLoan[];
   }

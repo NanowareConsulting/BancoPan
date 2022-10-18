@@ -29,7 +29,12 @@ export class UCGetUserData implements IUCGetUserData {
     const loans = (await this.oldLoanRepo.findByCPF(cpf)) ?? [];
 
     return new Right({
-      user,
+      user: {
+        id: user.id,
+        name: user.props.name.props.value,
+        cpf: user.props.cpf.props.value,
+        email: user.props.email.props.value,
+      },
       creditCards,
       loans,
     });

@@ -38,25 +38,28 @@ export function User() {
   useEffect(() => {
     getData().then((response) => {
       setData(response.data);
-      let email = response.data.user._props.email.props.value;
-
-      for (let i = 0; i < data?.creditCards?.length; i++) {
-        if (
-          data?.creditCards[i]?._props?.email?.props?.value &&
-          data?.creditCards[i]?._props?.email?.props?.value !== email
-        ) {
-          setShowNotification(true);
-        }
-      }
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    let email = data?.user?.email;
+
+    for (let i = 0; i < data?.creditCards?.length; i++) {
+      if (
+        data?.creditCards[i]?._props?.email?.props?.value &&
+        data?.creditCards[i]?._props?.email?.props?.value !== email
+      ) {
+        setShowNotification(true);
+      }
+    }
+  }, [data, showNotification]);
+
   return (
     <Page showNotification={showNotification}>
       <Article>
-        <S.Title>Olá, {data?.user?._props?.name?.props?.value}!</S.Title>
+        <S.Title>Olá, {data?.user?.name}!</S.Title>
         <List
           sx={{
             width: "100%",
@@ -70,7 +73,7 @@ export function User() {
                 <Email />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={data?.user?._props?.email?.props?.value} />
+            <ListItemText primary={data?.user?.email} />
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem>
@@ -79,7 +82,7 @@ export function User() {
                 <Document />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={data?.user?._props?.cpf?.props?.value} />
+            <ListItemText primary={data?.user?.cpf} />
           </ListItem>
         </List>
         <S.Section>

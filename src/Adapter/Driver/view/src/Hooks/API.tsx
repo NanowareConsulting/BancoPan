@@ -67,7 +67,7 @@ export function useAPI() {
     password: string;
   }) {
     try {
-      const response = await api().post("/users", {
+      await api().post("/users", {
         name,
         email,
         password,

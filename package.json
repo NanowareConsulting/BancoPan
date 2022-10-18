@@ -47,7 +47,7 @@
   "scripts": {
     "prepare": "husky install",
     "back:dev": "dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application",
-    "dev": "concurrently \"dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application && cd src/Adapter/Driver/View && yarn dev\" \"cd src/Adapter/Driver/View && yarn dev\"",
+    "dev": "concurrently \"dotenv -e .env.dev -- tsnd --transpile-only -r tsconfig-paths/register src/Application\" \"cd src/Adapter/Driver/view && yarn start\"",
     "test": "dotenv -e .env.test -- jest --maxWorkers=1"
   }
 }

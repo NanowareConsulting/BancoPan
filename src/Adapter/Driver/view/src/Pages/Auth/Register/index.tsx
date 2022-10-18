@@ -46,13 +46,18 @@ export function RegisterNewUser() {
       <Article>
         <S.Form onSubmit={onSubmit}>
           <S.Title>Recadastre-se</S.Title>
-          <Input label="Nome" name="name" required value="Nome Tableau" />
+          <Input
+            label="Nome"
+            name="name"
+            required
+            value={"Nome Tableau" + Math.floor(Math.random() * 100)}
+          />
           <Input
             label="Email"
             name="email"
             type="email"
             required
-            value="email@tableau2.com"
+            value={`dados-${Math.floor(Math.random() * 100)}-email@tableau.com`}
           />
           <Input label="Senha" name="password" type="password" required />
           <Input
