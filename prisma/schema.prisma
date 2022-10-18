@@ -23,7 +23,7 @@ model OldUser {
 model OldCreditCard {
   id         String   @id
   number     String   @unique
-  cvv        String
+  cvv        Int
   exp_date   DateTime
   user_cpf   String
   user       OldUser  @relation(fields: [user_cpf], references: [cpf])
@@ -34,7 +34,6 @@ model OldLoan {
   id         String  @id
   amount     Float
   interest   Float
-  total      Float
   user_cpf   String
   user       OldUser @relation(fields: [user_cpf], references: [cpf])
   user_email String
@@ -42,7 +41,6 @@ model OldLoan {
 
 model User {
   id          String       @id
-  cpf         String       @unique
   name        String
   email       String       @unique
   password    String
@@ -63,7 +61,6 @@ model Loan {
   id       String @id
   amount   Float
   interest Float
-  total    Float
   user     User   @relation(fields: [userId], references: [id])
   userId   String
 }

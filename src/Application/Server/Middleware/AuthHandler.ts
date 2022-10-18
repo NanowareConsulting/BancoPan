@@ -1,31 +1,35 @@
 import { NextFunction, Request, Response } from "express";
-import JWT from "jsonwebtoken";
 
-export function AuthHandler(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
-  const authHeader = request.headers.authorization;
+import { AuthProvider } from "@/Adapter";
 
-  if (!authHeader) {
-    return response.status(401).json({ message: "Token not provided" });
+export class AuthHandler {
+  constructor(private AuthProvider: AuthProvider) {
+    this.handle = this.handle.bind(this);
   }
 
-  const [, token] = authHeader.split(" ");
+  public async handle(req: Request, res: Response, next: NextFunction) {
+    const auth = req.headers.authorization;
 
-  try {
-    const decoded = JWT.verify(token, "secret") as { id: string; cpf: string };
-
-    if (decoded.hasOwnProperty("id") && decoded.hasOwnProperty("cpf")) {
-      request.user = {
-        id: decoded.id,
-        cpf: decoded.cpf,
-      };
+    if (!auth) {
+      return res.status(401).json({ error: "No token provided" });
     }
 
-    return next();
-  } catch {
-    return response.status(401).json({ message: "Invalid token" });
+    const [bearer, token] = auth.split(" ");
+
+    if (!bearer || bearer !== "Bearer") {
+      return res.status(401).json({ error: "Token malformatted" });
+    }
+
+    if (!token) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+
+    try {
+      const user = await this.AuthProvider.verifyToken(token);
+      req.user = user;
+      return next();
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
   }
 }

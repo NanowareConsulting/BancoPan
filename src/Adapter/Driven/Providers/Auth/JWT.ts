@@ -1,24 +1,29 @@
-import JWT from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-import { IAuthProvider } from "./interface";
+import { OldUser } from "@/Domain";
 
-type Payload = {
-  id: string;
-  cpf: string;
-};
+import { AuthProvider } from "./interface";
 
-export class JWTAuthProvider implements IAuthProvider<Payload> {
-  generateToken(payload: Payload): string {
-    return JWT.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+export class JWT implements AuthProvider {
+  async generateToken(OldUser: OldUser): Promise<string> {
+    return jwt.sign(
+      { id: OldUser.id, cpf: OldUser.props.cpf.props.value },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
   }
 
-  verifyToken(token: string): Payload | false {
-    try {
-      return JWT.verify(token, process.env.JWT_SECRET) as Payload;
-    } catch (error) {
-      return false;
-    }
+  async verifyToken(token: string): Promise<{
+    id: string;
+    cpf: string;
+  }> {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+      id: string;
+      cpf: string;
+    };
+
+    return decoded;
   }
 }

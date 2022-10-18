@@ -1,6 +1,8 @@
 import { OldLoan } from "@/Domain";
 
-export interface OldLoanRepository {
-  save: (user: OldLoan) => Promise<void>;
-  findByCPF: (cpf: string) => Promise<OldLoan | null>;
+import { Repo } from "../Core";
+
+export interface OldLoanRepo extends Repo<OldLoan> {
+  findByEmail(email: string): Promise<OldLoan[] | null>;
+  findByCPF(cpf: string): Promise<OldLoan[] | null>;
 }

@@ -1,43 +1,75 @@
 import { NextFunction, Request, Response } from "express";
-import JWT from "jsonwebtoken";
 
-import { UCRegisterOldUser } from "@/Domain";
+import { AuthProvider } from "@/Adapter";
 
-export class CTRLRegisterOldUser {
-  constructor() {
+import { Controller } from "../Core";
+import { RegisterOldUserError } from "./Error";
+import {
+  IUCRegisterOldUser,
+  RegisterOldUserRequest,
+  RegisterOldUserResponse,
+} from "./interface";
+
+export class CTRLRegisterOldUser implements Controller {
+  constructor(private service: IUCRegisterOldUser, private auth: AuthProvider) {
     this.handle = this.handle.bind(this);
   }
 
-  async handle(request: Request, response: Response, next: NextFunction) {
+  async handle(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
-      const { cpf, email, name, password } = request.body;
+      const data: RegisterOldUserRequest = request.body;
 
-      const oldUserOrError = await UCRegisterOldUser.execute({
-        cpf,
-        email,
-        name,
-        password,
-      });
+      const result: RegisterOldUserResponse = await this.service.execute(data);
 
-      if (oldUserOrError.isLeft()) {
-        return response.status(400).json(oldUserOrError.value.message);
+      if (result.isLeft()) {
+        switch (result.value.constructor) {
+          case RegisterOldUserError.InvalidName:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterOldUserError.InvalidEmail:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterOldUserError.InvalidPassword:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterOldUserError.EmailAlreadyExists:
+            return response.status(403).json({
+              message: result.value.message,
+            });
+
+          case RegisterOldUserError.InvalidCPF:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterOldUserError.CPFAlreadyExists:
+            return response.status(403).json({
+              message: result.value.message,
+            });
+
+          default:
+            return next(result.value);
+        }
       }
 
-      const oldUser = oldUserOrError.value;
+      const token = await this.auth.generateToken(result.value);
 
-      const token = JWT.sign(
-        {
-          id: oldUser.id,
-          cpf: oldUser.cpf,
-        },
-        "secret",
-        {
-          expiresIn: "1d",
-        }
-      );
-
-      return response.status(201).json({ token });
+      return response.status(201).json({
+        message: "OldUser created successfully",
+        token,
+      });
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }

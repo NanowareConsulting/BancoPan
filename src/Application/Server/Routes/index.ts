@@ -1,51 +1,93 @@
 import { Router } from "express";
 
-import { PrismaUserRepo } from "@/Adapter";
 import {
-  CTRLApplyForOldCreditCard,
-  CTRLApplyForOldLoan,
-  CTRLGetOldCreditCards,
-  CTRLGetOldLoans,
-  CTRLGetOldUser,
-  CTRLLogInOldUser,
+  JWT,
+  MockOldCreditCardRepo,
+  MockOldLoanRepo,
+  MockOldUserRepo,
+  MockUserRepo,
+  OldCreditCardRepo,
+  OldLoanRepo,
+  OldUserRepo,
+  PrismaOldCreditCardRepo,
+  PrismaOldLoanRepo,
+  PrismaOldUserRepo,
+  PrismaUserRepo,
+  UserRepo,
+} from "@/Adapter";
+import {
+  CTRLGetUserData,
+  CTRLRegisterOldCreditCard,
+  CTRLRegisterOldLoan,
   CTRLRegisterOldUser,
   CTRLRegisterUser,
+  UCGetUserData,
+  UCRegisterOldCreditCard,
+  UCRegisterOldLoan,
+  UCRegisterOldUser,
   UCRegisterUser,
-} from "@/Domain";
+} from "@/Domain/UseCase";
 
 import { AuthHandler } from "../Middleware/AuthHandler";
 
+let oldUserRepo: OldUserRepo = new MockOldUserRepo();
+let oldCreditCardRepo: OldCreditCardRepo = new MockOldCreditCardRepo(
+  oldUserRepo
+);
+let oldLoanRepo: OldLoanRepo = new MockOldLoanRepo(oldUserRepo);
+let userRepo: UserRepo = new MockUserRepo();
+
+if (process.env.NODE_ENV !== "test") {
+  oldUserRepo = new PrismaOldUserRepo();
+  oldCreditCardRepo = new PrismaOldCreditCardRepo();
+  oldLoanRepo = new PrismaOldLoanRepo();
+  userRepo = new PrismaUserRepo();
+}
+
+const auth = new JWT();
+const authHandler = new AuthHandler(auth);
+
+const registerUser = new UCRegisterUser(userRepo);
+const { handle: handleRegisterUser } = new CTRLRegisterUser(registerUser, auth);
+
+const registerOldUser = new UCRegisterOldUser(oldUserRepo);
+const { handle: handleRegisterOldUser } = new CTRLRegisterOldUser(
+  registerOldUser,
+  auth
+);
+
+const registerOldCreditCard = new UCRegisterOldCreditCard(
+  oldCreditCardRepo,
+  oldUserRepo
+);
+const { handle: handleRegisterOldCreditCard } = new CTRLRegisterOldCreditCard(
+  registerOldCreditCard
+);
+
+const registerOldLoan = new UCRegisterOldLoan(oldLoanRepo, oldUserRepo);
+const { handle: handleRegisterOldLoan } = new CTRLRegisterOldLoan(
+  registerOldLoan
+);
+
+const getUserData = new UCGetUserData(
+  oldUserRepo,
+  oldCreditCardRepo,
+  oldLoanRepo
+);
+const { handle: handleGetUserData } = new CTRLGetUserData(getUserData, auth);
+
 const router = Router();
 
-router.post("/register-old-user", new CTRLRegisterOldUser().handle);
-router.post(
-  "/apply-for-old-credit-card",
-  AuthHandler,
-  new CTRLApplyForOldCreditCard().handle
-);
-router.get("/get-old-user", AuthHandler, new CTRLGetOldUser().handle);
-router.get(
-  "/get-old-credit-card",
-  AuthHandler,
-  new CTRLGetOldCreditCards().handle
-);
-router.post(
-  "/apply-for-old-loan",
-  AuthHandler,
-  new CTRLApplyForOldLoan().handle
-);
-router.get("/get-old-loans", AuthHandler, new CTRLGetOldLoans().handle);
-router.post("/login-old-user", new CTRLLogInOldUser().handle);
+router.route("/users").post(handleRegisterUser);
 
-// Dependency Injection for new system
+router.route("/old/users").post(handleRegisterOldUser);
 
-const userRepo = new PrismaUserRepo();
-const registerUser = new UCRegisterUser(userRepo);
+router
+  .route("/old/credit-cards")
+  .post(authHandler.handle, handleRegisterOldCreditCard);
 
-router.post(
-  "/register-user",
-  AuthHandler,
-  new CTRLRegisterUser(registerUser).execute
-);
+router.route("/old/loans").post(handleRegisterOldLoan);
+
+router.route("/users/data").get(authHandler.handle, handleGetUserData);
 
 export default router;

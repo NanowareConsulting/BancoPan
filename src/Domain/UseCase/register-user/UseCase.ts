@@ -1,40 +1,50 @@
-import { IUserRepo } from "@/Adapter";
-import { User } from "@/Domain";
+import { UserRepo } from "@/Adapter";
+import { Email, Name, Password, User } from "@/Domain";
+import { Left, Right } from "@/Utils/Either";
 
+import { RegisterUserError } from "./Error";
 import {
   IUCRegisterUser,
-  IUCRegisterUserInput,
-  IUCRegisterUserOutput,
+  RegisterUserRequest,
+  RegisterUserResponse,
 } from "./interface";
 
 export class UCRegisterUser implements IUCRegisterUser {
-  constructor(private userRepo: IUserRepo) {
-    this.execute = this.execute.bind(this);
-  }
+  constructor(private readonly userRepository: UserRepo) {}
 
-  async execute(data: IUCRegisterUserInput): Promise<IUCRegisterUserOutput> {
-    const userOrError = User.create({
-      cpf: data.cpf,
-      email: data.email,
-      name: data.name,
-      password: data.password,
-      creditCards: [],
-      loans: [],
-    });
+  async execute(data: RegisterUserRequest): Promise<RegisterUserResponse> {
+    const name = Name.create(data.name);
+    const email = Email.create(data.email);
+    const password = Password.create(data.password);
 
-    if (userOrError.isLeft()) {
-      throw userOrError.value;
+    if (name.isLeft()) {
+      return new Left(new RegisterUserError.InvalidName(data.name));
     }
 
-    const user = userOrError.value;
+    if (email.isLeft()) {
+      return new Left(new RegisterUserError.InvalidEmail(data.email));
+    }
 
-    const userCreated = await this.userRepo.create(user);
+    if (password.isLeft()) {
+      return new Left(new RegisterUserError.InvalidPassword(data.password));
+    }
 
-    return {
-      id: userCreated.id,
-      name: userCreated.name,
-      cpf: userCreated.cpf,
-      email: userCreated.email,
-    };
+    const emailAlreadyExists = await this.userRepository.findByEmail(
+      data.email
+    );
+
+    if (emailAlreadyExists) {
+      return new Left(new RegisterUserError.EmailAlreadyExists(data.email));
+    }
+
+    const user = User.create({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+
+    const userCreated = await this.userRepository.save(user);
+
+    return new Right(userCreated);
   }
 }

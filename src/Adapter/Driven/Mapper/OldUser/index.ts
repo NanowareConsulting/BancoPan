@@ -1,37 +1,60 @@
-import { OldUser } from "@/Domain";
+import { CPF, Email, Name, OldUser, Password } from "@/Domain";
 
-import { Mapper } from "../Core";
+import { Mapper as IMapper } from "../Core";
 
-type Persistence = {
-  id: string;
-  cpf: string;
-  name: string;
-  email: string;
-  password: string;
-};
+export namespace OldUserMapper {
+  export type Entity = OldUser;
 
-type Entity = OldUser;
+  export type Persistence = {
+    id: string;
+    name: string;
+    cpf: string;
+    email: string;
+    password: string;
+  };
 
-export class OldUserMapper implements Mapper<Persistence, Entity> {
-  toPersistence(entity: Entity): Persistence {
-    return {
-      id: entity.id,
-      cpf: entity.cpf,
-      name: entity.name,
-      email: entity.email,
-      password: entity.password,
-    };
+  class OldUserMapper implements IMapper<Entity, Persistence> {
+    toEntity(p: Persistence): Entity {
+      const nameOrError = Name.create(p.name);
+      const emailOrError = Email.create(p.email);
+      const cpfOrError = CPF.create(p.cpf);
+      const passwordOrError = Password.existing(p.password);
+
+      if (nameOrError.isLeft()) throw new Error("Invalid name");
+
+      if (emailOrError.isLeft()) throw new Error("Invalid email");
+
+      if (cpfOrError.isLeft()) throw new Error("Invalid cpf");
+
+      const name = nameOrError.value;
+      const email = emailOrError.value;
+      const password = passwordOrError;
+      const cpf = cpfOrError.value;
+
+      return OldUser.existing(
+        {
+          name,
+          email,
+          cpf,
+          password,
+        },
+        p.id
+      );
+    }
+
+    toPersistence(e: Entity): Persistence {
+      return {
+        id: e.id,
+        name: e.props.name.props.value,
+        email: e.props.email.props.value,
+        cpf: e.props.cpf.props.value,
+        password: e.props.password.props.value,
+      };
+    }
   }
 
-  toEntity(persistence: Persistence): Entity {
-    return OldUser.existing(
-      {
-        cpf: persistence.cpf,
-        name: persistence.name,
-        email: persistence.email,
-        password: persistence.password,
-      },
-      persistence.id
-    );
-  }
+  const Mapper = new OldUserMapper();
+
+  export const toEntity = Mapper.toEntity;
+  export const toPersistence = Mapper.toPersistence;
 }

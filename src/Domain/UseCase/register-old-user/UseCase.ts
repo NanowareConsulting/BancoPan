@@ -1,48 +1,64 @@
-import { hashSync } from "bcrypt";
+import { OldUserRepo } from "@/Adapter";
+import { CPF, Email, Name, OldUser, Password } from "@/Domain";
+import { Left, Right } from "@/Utils/Either";
 
-import { prisma } from "@/Adapter";
-import { OldUser } from "@/Domain";
-import { Either, Left, Right } from "@/Utils/Either";
+import { RegisterOldUserError } from "./Error";
+import {
+  IUCRegisterOldUser,
+  RegisterOldUserRequest,
+  RegisterOldUserResponse,
+} from "./interface";
 
-type OldUserDTO = {
-  name: string;
-  email: string;
-  password: string;
-  cpf: string;
-};
+export class UCRegisterOldUser implements IUCRegisterOldUser {
+  constructor(private readonly userRepository: OldUserRepo) {}
 
-export class UCRegisterOldUser {
-  public static async execute(
-    data: OldUserDTO
-  ): Promise<Either<Error, OldUser>> {
-    const oldUserOrError = OldUser.create(data);
+  async execute(
+    data: RegisterOldUserRequest
+  ): Promise<RegisterOldUserResponse> {
+    const name = Name.create(data.name);
+    const email = Email.create(data.email);
+    const cpf = CPF.create(data.cpf);
+    const password = Password.create(data.password);
 
-    if (oldUserOrError.isLeft()) {
-      return new Left(oldUserOrError.value);
+    if (name.isLeft()) {
+      return new Left(new RegisterOldUserError.InvalidName(data.name));
     }
 
-    const oldUser = oldUserOrError.value;
-
-    const userAlreadyExists = await prisma.oldUser.findUnique({
-      where: {
-        cpf: oldUser.cpf,
-      },
-    });
-
-    if (userAlreadyExists) {
-      return new Left(new Error("User already exists"));
+    if (email.isLeft()) {
+      return new Left(new RegisterOldUserError.InvalidEmail(data.email));
     }
 
-    await prisma.oldUser.create({
-      data: {
-        id: oldUser.id,
-        name: oldUser.name,
-        email: oldUser.email,
-        password: hashSync(oldUser.password, 10),
-        cpf: oldUser.cpf,
-      },
+    if (cpf.isLeft()) {
+      return new Left(new RegisterOldUserError.InvalidCPF(data.cpf));
+    }
+
+    if (password.isLeft()) {
+      return new Left(new RegisterOldUserError.InvalidPassword(data.password));
+    }
+
+    const emailAlreadyExists = await this.userRepository.findByEmail(
+      data.email
+    );
+
+    if (emailAlreadyExists) {
+      return new Left(new RegisterOldUserError.EmailAlreadyExists(data.email));
+    }
+
+    const cpfAlreadyExists = await this.userRepository.findByCPF(data.cpf);
+
+    if (cpfAlreadyExists) {
+      return new Left(new RegisterOldUserError.CPFAlreadyExists(data.cpf));
+    }
+
+    const user = OldUser.create({
+      name: name.value,
+      email: email.value,
+      cpf: cpf.value,
+      password: password.value,
     });
 
-    return new Right(oldUser);
+    const userCreated = await this.userRepository.save(user);
+
+    return new Right(userCreated);
   }
 }

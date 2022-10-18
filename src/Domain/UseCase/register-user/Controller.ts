@@ -1,21 +1,60 @@
 import { NextFunction, Request, Response } from "express";
 
-import { IUCRegisterUser } from "./interface";
+import { AuthProvider } from "@/Adapter";
 
-export class CTRLRegisterUser {
-  constructor(private uc: IUCRegisterUser) {
-    this.execute = this.execute.bind(this);
+import { Controller } from "../Core";
+import { RegisterUserError } from "./Error";
+import {
+  IUCRegisterUser,
+  RegisterUserRequest,
+  RegisterUserResponse,
+} from "./interface";
+
+export class CTRLRegisterUser implements Controller {
+  constructor(private service: IUCRegisterUser, private auth: AuthProvider) {
+    this.handle = this.handle.bind(this);
   }
 
-  async execute(req: Request, res: Response, next: NextFunction) {
+  async handle(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
-      const { body, user } = req;
-      const { name, email, password } = body;
-      const { cpf } = user;
+      const data: RegisterUserRequest = request.body;
 
-      const newUser = await this.uc.execute({ name, cpf, email, password });
+      const result: RegisterUserResponse = await this.service.execute(data);
 
-      return res.status(201).json(newUser);
+      if (result.isLeft()) {
+        switch (result.value.constructor) {
+          case RegisterUserError.InvalidName:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterUserError.InvalidEmail:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterUserError.InvalidPassword:
+            return response.status(400).json({
+              message: result.value.message,
+            });
+
+          case RegisterUserError.EmailAlreadyExists:
+            return response.status(403).json({
+              message: result.value.message,
+            });
+
+          default:
+            return next(result.value);
+        }
+      }
+
+      return response.status(201).json({
+        message: "User created successfully",
+      });
     } catch (err) {
       console.log(err);
       next(err);
