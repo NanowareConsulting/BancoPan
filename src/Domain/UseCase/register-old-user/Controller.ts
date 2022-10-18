@@ -20,7 +20,7 @@ export class CTRLRegisterOldUser {
       });
 
       if (oldUserOrError.isLeft()) {
-        return response.status(400).json(oldUserOrError.value);
+        return response.status(400).json(oldUserOrError.value.message);
       }
 
       const oldUser = oldUserOrError.value;
@@ -36,7 +36,7 @@ export class CTRLRegisterOldUser {
         }
       );
 
-      return response.status(201).json(token);
+      return response.status(201).json({ token });
     } catch (err) {
       next(err);
     }

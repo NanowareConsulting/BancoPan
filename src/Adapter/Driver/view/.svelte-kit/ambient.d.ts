@@ -124,6 +124,7 @@ declare module '$env/static/private' {
 	export const npm_package_devDependencies_pretty_quick: string;
 	export const DISPLAY: string;
 	export const npm_package_devDependencies__smui_icon_button: string;
+	export const npm_package_devDependencies__beyonk_svelte_notifications: string;
 	export const LANG: string;
 	export const XDG_CURRENT_DESKTOP: string;
 	export const DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
@@ -183,8 +184,8 @@ declare module '$env/static/private' {
 	export const npm_config_save_prefix: string;
 	export const npm_config_ignore_optional: string;
 	export const npm_package_devDependencies__sveltejs_adapter_auto: string;
-	export const npm_package_dependencies_jsonwebtoken: string;
 	export const npm_package_devDependencies_prettier_plugin_svelte: string;
+	export const npm_package_dependencies_jsonwebtoken: string;
 	export const npm_package_scripts_preview: string;
 	export const VTE_VERSION: string;
 	export const npm_package_dependencies_typescript: string;
@@ -318,6 +319,7 @@ declare module '$env/dynamic/private' {
 		npm_package_devDependencies_pretty_quick: string;
 		DISPLAY: string;
 		npm_package_devDependencies__smui_icon_button: string;
+		npm_package_devDependencies__beyonk_svelte_notifications: string;
 		LANG: string;
 		XDG_CURRENT_DESKTOP: string;
 		DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
@@ -377,8 +379,8 @@ declare module '$env/dynamic/private' {
 		npm_config_save_prefix: string;
 		npm_config_ignore_optional: string;
 		npm_package_devDependencies__sveltejs_adapter_auto: string;
-		npm_package_dependencies_jsonwebtoken: string;
 		npm_package_devDependencies_prettier_plugin_svelte: string;
+		npm_package_dependencies_jsonwebtoken: string;
 		npm_package_scripts_preview: string;
 		VTE_VERSION: string;
 		npm_package_dependencies_typescript: string;

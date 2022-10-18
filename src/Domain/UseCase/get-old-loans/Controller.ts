@@ -9,14 +9,14 @@ export class CTRLGetOldLoans {
 
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
-      const { cpf } = request.params;
+      const { cpf } = request.user;
 
       const oldLoansOrError = await UCGetOldLoan.execute({
         cpf,
       });
 
       if (oldLoansOrError.isLeft()) {
-        return response.status(400).json(oldLoansOrError.value);
+        return response.status(400).json(oldLoansOrError.value.message);
       }
 
       const oldLoans = oldLoansOrError.value;

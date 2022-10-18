@@ -28,7 +28,7 @@
 		{#if notify}
 			<Button class="material-icons" on:click={goToRegisterNewUser}>notifications</Button>
 		{/if}
-		<a href="/user" class="link">Área do Cliente</a>
+		<a href="/login" class="link">Área do Cliente</a>
 		<button on:click={goToRegister} class="button">Abrir conta</button>
 	</div>
 </header>

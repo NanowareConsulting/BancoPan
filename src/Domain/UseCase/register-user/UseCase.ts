@@ -13,7 +13,14 @@ export class UCRegisterUser implements IUCRegisterUser {
   }
 
   async execute(data: IUCRegisterUserInput): Promise<IUCRegisterUserOutput> {
-    const userOrError = User.create(data);
+    const userOrError = User.create({
+      cpf: data.cpf,
+      email: data.email,
+      name: data.name,
+      password: data.password,
+      creditCards: [],
+      loans: [],
+    });
 
     if (userOrError.isLeft()) {
       throw userOrError.value;

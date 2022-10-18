@@ -9,14 +9,14 @@ export class CTRLGetOldCreditCards {
 
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
-      const { cpf } = request.params;
+      const { cpf } = request.user;
 
       const oldCreditCardsOrError = await UCGetOldCreditCard.execute({
         cpf,
       });
 
       if (oldCreditCardsOrError.isLeft()) {
-        return response.status(400).json(oldCreditCardsOrError.value);
+        return response.status(400).json(oldCreditCardsOrError.value.message);
       }
 
       const oldCreditCards = oldCreditCardsOrError.value;

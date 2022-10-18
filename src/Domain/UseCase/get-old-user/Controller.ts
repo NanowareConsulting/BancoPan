@@ -9,14 +9,14 @@ export class CTRLGetOldUser {
 
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
-      const { cpf } = request.params;
+      const { cpf } = request.user;
 
       const oldUserOrError = await UCGetOldUser.execute({
         cpf,
       });
 
       if (oldUserOrError.isLeft()) {
-        return response.status(400).json(oldUserOrError.value);
+        return response.status(400).json(oldUserOrError.value.message);
       }
 
       const oldUser = oldUserOrError.value;

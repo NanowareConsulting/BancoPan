@@ -1,3 +1,5 @@
+import { hashSync } from "bcrypt";
+
 import { prisma } from "@/Adapter";
 import { OldUser } from "@/Domain";
 import { Either, Left, Right } from "@/Utils/Either";
@@ -36,7 +38,7 @@ export class UCRegisterOldUser {
         id: oldUser.id,
         name: oldUser.name,
         email: oldUser.email,
-        password: oldUser.password,
+        password: hashSync(oldUser.password, 10),
         cpf: oldUser.cpf,
       },
     });

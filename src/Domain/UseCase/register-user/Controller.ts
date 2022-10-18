@@ -9,12 +9,15 @@ export class CTRLRegisterUser {
 
   async execute(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, cpf, email, password } = req.body;
+      const { body, user } = req;
+      const { name, email, password } = body;
+      const { cpf } = user;
 
-      const user = await this.uc.execute({ name, cpf, email, password });
+      const newUser = await this.uc.execute({ name, cpf, email, password });
 
-      return res.status(201).json(user);
+      return res.status(201).json(newUser);
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }

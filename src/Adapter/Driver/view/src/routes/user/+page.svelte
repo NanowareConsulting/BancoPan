@@ -22,18 +22,14 @@
 	let notify = false;
 
 	async function getOldDashboard() {
-		const urlParams = new URLSearchParams(window.location.search);
-		let cpf = urlParams.get('cpf');
+		return await API.getOldDashboard();
+	}
 
-		if (!cpf) {
-			cpf = window.prompt('Informe seu CPF') as string;
-
-			if (!cpf) {
-				window.location.href = '/';
-			}
-		}
-
-		return await API.getOldDashboard(cpf);
+	function goToRegisterCreditCard() {
+		window.location.href = '/apply-for-old-credit-card';
+	}
+	function goToRegisterLoan() {
+		window.location.href = '/apply-for-old-loan';
 	}
 
 	onMount(async () => {
@@ -78,9 +74,9 @@
 			</div>
 
 			<div id="section">
-				<div id="section-header">
+				<div class="section-header">
 					<h1>Cartões de Crédito</h1>
-					<Button variant="outlined">Adicionar</Button>
+					<Button variant="outlined" on:click={goToRegisterCreditCard}>Adicionar</Button>
 				</div>
 				{#await data}
 					<p>Carregando...</p>
@@ -107,8 +103,10 @@
 			</div>
 
 			<div id="section">
-				<h1>Empréstimos</h1>
-
+				<div class="section-header">
+					<h1>Empréstimos</h1>
+					<Button variant="outlined" on:click={goToRegisterLoan}>Adicionar</Button>
+				</div>
 				{#await data}
 					<p>Carregando...</p>
 				{:then data}
@@ -147,7 +145,7 @@
 		overflow: hidden;
 	}
 
-	#section-header {
+	.section-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -172,18 +170,6 @@
 		grid-template-rows: 1fr;
 		grid-gap: 40px;
 		grid-auto-flow: column;
-	}
-
-	#card {
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr 1fr 1fr 1fr;
-		grid-gap: 40px;
-
-		padding: 20px;
-
-		border: 1px solid #eaeaea;
-		border-radius: 12px;
 	}
 
 	.label {

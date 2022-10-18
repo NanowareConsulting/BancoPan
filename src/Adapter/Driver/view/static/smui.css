@@ -312,8 +312,8 @@ svg.mdc-button__icon {
 	border-radius: var(--mdc-text-button-container-shape, var(--mdc-shape-small, 4px));
 }
 .mdc-button:not(:disabled) {
-	color: #ff3e00;
-	color: var(--mdc-text-button-label-text-color, var(--mdc-theme-primary, #ff3e00));
+	color: #039be5;
+	color: var(--mdc-text-button-label-text-color, var(--mdc-theme-primary, #039be5));
 }
 .mdc-button:disabled {
 	color: rgba(0, 0, 0, 0.38);
@@ -329,10 +329,10 @@ svg.mdc-button__icon {
 }
 .mdc-button .mdc-button__ripple::before,
 .mdc-button .mdc-button__ripple::after {
-	background-color: #ff3e00;
+	background-color: #039be5;
 	background-color: var(
 		--mdc-text-button-hover-state-layer-color,
-		var(--mdc-theme-primary, #ff3e00)
+		var(--mdc-theme-primary, #039be5)
 	);
 }
 .mdc-button:hover .mdc-button__ripple::before,
@@ -393,16 +393,16 @@ svg.mdc-button__icon {
 	border-radius: var(--mdc-filled-button-container-shape, var(--mdc-shape-small, 4px));
 }
 .mdc-button--unelevated:not(:disabled) {
-	background-color: #ff3e00;
-	background-color: var(--mdc-filled-button-container-color, var(--mdc-theme-primary, #ff3e00));
+	background-color: #039be5;
+	background-color: var(--mdc-filled-button-container-color, var(--mdc-theme-primary, #039be5));
 }
 .mdc-button--unelevated:disabled {
 	background-color: rgba(0, 0, 0, 0.12);
 	background-color: var(--mdc-filled-button-disabled-container-color, rgba(0, 0, 0, 0.12));
 }
 .mdc-button--unelevated:not(:disabled) {
-	color: #fff;
-	color: var(--mdc-filled-button-label-text-color, var(--mdc-theme-on-primary, #fff));
+	color: #000;
+	color: var(--mdc-filled-button-label-text-color, var(--mdc-theme-on-primary, #000));
 }
 .mdc-button--unelevated:disabled {
 	color: rgba(0, 0, 0, 0.38);
@@ -418,10 +418,10 @@ svg.mdc-button__icon {
 }
 .mdc-button--unelevated .mdc-button__ripple::before,
 .mdc-button--unelevated .mdc-button__ripple::after {
-	background-color: #fff;
+	background-color: #000;
 	background-color: var(
 		--mdc-filled-button-hover-state-layer-color,
-		var(--mdc-theme-on-primary, #fff)
+		var(--mdc-theme-on-primary, #000)
 	);
 }
 .mdc-button--unelevated:hover .mdc-button__ripple::before,
@@ -490,16 +490,16 @@ svg.mdc-button__icon {
 	);
 }
 .mdc-button--raised:not(:disabled) {
-	background-color: #ff3e00;
-	background-color: var(--mdc-protected-button-container-color, var(--mdc-theme-primary, #ff3e00));
+	background-color: #039be5;
+	background-color: var(--mdc-protected-button-container-color, var(--mdc-theme-primary, #039be5));
 }
 .mdc-button--raised:disabled {
 	background-color: rgba(0, 0, 0, 0.12);
 	background-color: var(--mdc-protected-button-disabled-container-color, rgba(0, 0, 0, 0.12));
 }
 .mdc-button--raised:not(:disabled) {
-	color: #fff;
-	color: var(--mdc-protected-button-label-text-color, var(--mdc-theme-on-primary, #fff));
+	color: #000;
+	color: var(--mdc-protected-button-label-text-color, var(--mdc-theme-on-primary, #000));
 }
 .mdc-button--raised:disabled {
 	color: rgba(0, 0, 0, 0.38);
@@ -515,10 +515,10 @@ svg.mdc-button__icon {
 }
 .mdc-button--raised .mdc-button__ripple::before,
 .mdc-button--raised .mdc-button__ripple::after {
-	background-color: #fff;
+	background-color: #000;
 	background-color: var(
 		--mdc-protected-button-hover-state-layer-color,
-		var(--mdc-theme-on-primary, #fff)
+		var(--mdc-theme-on-primary, #000)
 	);
 }
 .mdc-button--raised:hover .mdc-button__ripple::before,
@@ -623,8 +623,8 @@ svg.mdc-button__icon {
 	border-width: var(--mdc-outlined-button-outline-width, 1px);
 }
 .mdc-button--outlined:not(:disabled) {
-	color: #ff3e00;
-	color: var(--mdc-outlined-button-label-text-color, var(--mdc-theme-primary, #ff3e00));
+	color: #039be5;
+	color: var(--mdc-outlined-button-label-text-color, var(--mdc-theme-primary, #039be5));
 }
 .mdc-button--outlined:disabled {
 	color: rgba(0, 0, 0, 0.38);
@@ -640,10 +640,10 @@ svg.mdc-button__icon {
 }
 .mdc-button--outlined .mdc-button__ripple::before,
 .mdc-button--outlined .mdc-button__ripple::after {
-	background-color: #ff3e00;
+	background-color: #039be5;
 	background-color: var(
 		--mdc-outlined-button-hover-state-layer-color,
-		var(--mdc-theme-primary, #ff3e00)
+		var(--mdc-theme-primary, #039be5)
 	);
 }
 .mdc-button--outlined:hover .mdc-button__ripple::before,
@@ -847,30 +847,30 @@ svg.mdc-button__icon {
 }
 .smui-ripple-surface--primary::before,
 .smui-ripple-surface--primary::after {
-	background-color: #ff3e00;
-	background-color: var(--mdc-ripple-color, var(--mdc-theme-primary, #ff3e00));
+	background-color: #039be5;
+	background-color: var(--mdc-ripple-color, var(--mdc-theme-primary, #039be5));
 }
 .smui-ripple-surface--primary:hover::before,
 .smui-ripple-surface--primary.mdc-ripple-surface--hover::before {
-	opacity: 0.04;
-	opacity: var(--mdc-ripple-hover-opacity, 0.04);
+	opacity: 0.08;
+	opacity: var(--mdc-ripple-hover-opacity, 0.08);
 }
 .smui-ripple-surface--primary.mdc-ripple-upgraded--background-focused::before,
 .smui-ripple-surface--primary:not(.mdc-ripple-upgraded):focus::before {
 	transition-duration: 75ms;
-	opacity: 0.12;
-	opacity: var(--mdc-ripple-focus-opacity, 0.12);
+	opacity: 0.24;
+	opacity: var(--mdc-ripple-focus-opacity, 0.24);
 }
 .smui-ripple-surface--primary:not(.mdc-ripple-upgraded)::after {
 	transition: opacity 150ms linear;
 }
 .smui-ripple-surface--primary:not(.mdc-ripple-upgraded):active::after {
 	transition-duration: 75ms;
-	opacity: 0.12;
-	opacity: var(--mdc-ripple-press-opacity, 0.12);
+	opacity: 0.24;
+	opacity: var(--mdc-ripple-press-opacity, 0.24);
 }
 .smui-ripple-surface--primary.mdc-ripple-upgraded {
-	--mdc-ripple-fg-opacity: var(--mdc-ripple-press-opacity, 0.12);
+	--mdc-ripple-fg-opacity: var(--mdc-ripple-press-opacity, 0.24);
 }
 .smui-ripple-surface--secondary::before,
 .smui-ripple-surface--secondary::after {
@@ -2174,8 +2174,8 @@ svg.mdc-button__icon {
 	}
 }
 .mdc-text-field .mdc-text-field__input {
-	caret-color: #ff3e00;
-	caret-color: var(--mdc-theme-primary, #ff3e00);
+	caret-color: #039be5;
+	caret-color: var(--mdc-theme-primary, #039be5);
 }
 .mdc-text-field:not(.mdc-text-field--disabled)
 	+ .mdc-text-field-helper-line
@@ -2380,8 +2380,8 @@ svg.mdc-button__icon {
 	border-bottom-color: rgba(0, 0, 0, 0.87);
 }
 .mdc-text-field--filled .mdc-line-ripple::after {
-	border-bottom-color: #ff3e00;
-	border-bottom-color: var(--mdc-theme-primary, #ff3e00);
+	border-bottom-color: #039be5;
+	border-bottom-color: var(--mdc-theme-primary, #039be5);
 }
 .mdc-text-field--filled .mdc-floating-label {
 	left: 16px;
@@ -2474,8 +2474,8 @@ svg.mdc-button__icon {
 	.mdc-notched-outline__notch,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused
 	.mdc-notched-outline__trailing {
-	border-color: #ff3e00;
-	border-color: var(--mdc-theme-primary, #ff3e00);
+	border-color: #039be5;
+	border-color: var(--mdc-theme-primary, #039be5);
 }
 .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
 	border-top-left-radius: 4px;
@@ -2933,7 +2933,7 @@ svg.mdc-button__icon {
 	align-self: flex-start;
 }
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
-	color: rgba(255, 62, 0, 0.87);
+	color: rgba(3, 155, 229, 0.87);
 }
 .mdc-text-field--focused .mdc-notched-outline__leading,
 .mdc-text-field--focused .mdc-notched-outline__notch,
@@ -3332,8 +3332,8 @@ svg.mdc-button__icon {
 	border-bottom-color: rgba(0, 0, 0, 0.87);
 }
 .smui-text-field--standard .mdc-line-ripple::after {
-	border-bottom-color: #ff3e00;
-	border-bottom-color: var(--mdc-theme-primary, #ff3e00);
+	border-bottom-color: #039be5;
+	border-bottom-color: var(--mdc-theme-primary, #039be5);
 }
 .smui-text-field--standard .mdc-floating-label {
 	left: 0;

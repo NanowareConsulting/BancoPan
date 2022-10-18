@@ -9,7 +9,8 @@ export class CTRLApplyForOldLoan {
 
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
-      const { cpf, email, amount } = request.body;
+      const { cpf } = request.user;
+      const { email, amount } = request.body;
 
       const oldLoanOrError = await UCApplyForOldLoan.execute({
         amount: amount,
@@ -18,7 +19,7 @@ export class CTRLApplyForOldLoan {
       });
 
       if (oldLoanOrError.isLeft()) {
-        return response.status(400).json(oldLoanOrError.value);
+        return response.status(400).json(oldLoanOrError.value.message);
       }
 
       const oldLoan = oldLoanOrError.value;

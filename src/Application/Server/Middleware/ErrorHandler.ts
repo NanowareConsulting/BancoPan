@@ -6,5 +6,5 @@ export function ErrorHandler(
   response: Response,
   next: NextFunction
 ) {
-  response.status(500).json({ message: "Server Error!" });
+  response.status(500).json("Server Error!");
 }

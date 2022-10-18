@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@beyonk/svelte-notifications@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@beyonk/svelte-notifications/-/svelte-notifications-4.2.0.tgz#872b845fbe6bb590f55bcead3fd4034f0e7223c7"
+  integrity sha512-ZP/k3lbIB97aJDY5rUK61++RvKABNuK+iek0J2ucAL5h3BOSlU2FyODf2fD49eESnBYIUSxmKU25S3XslUpmVA==
+
 "@cloudflare/workers-types@^3.14.0":
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-3.17.0.tgz#8cee4499019daa6a23c9cc5501aa8382bb94d4da"

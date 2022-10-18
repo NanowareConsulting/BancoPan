@@ -18,7 +18,7 @@ export class CTRLLogInOldUser {
       });
 
       if (oldUserOrError.isLeft()) {
-        return response.status(400).json(oldUserOrError.value);
+        return response.status(400).json(oldUserOrError.value.message);
       }
 
       const oldUser = oldUserOrError.value;
@@ -34,7 +34,7 @@ export class CTRLLogInOldUser {
         }
       );
 
-      return response.status(200).json(token);
+      return response.status(200).json({ token });
     } catch (err) {
       next(err);
     }

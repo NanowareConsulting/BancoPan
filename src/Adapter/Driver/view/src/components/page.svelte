@@ -1,12 +1,17 @@
 <script>
+	import { NotificationDisplay } from '@beyonk/svelte-notifications';
+
 	import Header from '$components/header.svelte';
+	import Footer from './footer.svelte';
 
 	export let notify = false;
 </script>
 
+<NotificationDisplay />
 <div id="page">
 	<Header {notify} />
 	<slot />
+	<Footer />
 </div>
 
 <style>

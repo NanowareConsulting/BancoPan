@@ -9,15 +9,17 @@ export class CTRLApplyForOldCreditCard {
 
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
-      const { userCpf, userEmail } = request.body;
+      const { body, user } = request;
+      const { cpf } = user;
+      const { email } = body;
 
       const oldCreditCardOrError = await UCApplyForOldCreditCard.execute({
-        userCpf,
-        userEmail,
+        userCpf: cpf,
+        userEmail: email,
       });
 
       if (oldCreditCardOrError.isLeft()) {
-        return response.status(400).json(oldCreditCardOrError.value);
+        return response.status(400).json(oldCreditCardOrError.value.message);
       }
 
       const oldCreditCard = oldCreditCardOrError.value;

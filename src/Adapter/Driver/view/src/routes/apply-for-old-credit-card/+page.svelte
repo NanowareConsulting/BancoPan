@@ -5,16 +5,15 @@
 	import Page from '$components/page.svelte';
 	import { API } from '$api';
 
-	let name = '';
 	let email = '';
-	let password = '';
-
 	async function submit(e: Event) {
 		e.preventDefault();
 		try {
-			await API.registerNewUser({ name, email, password });
+			await API.applyForOldCreditCard({
+				email
+			});
 
-			window.location.href = '/';
+			window.location.href = '/user';
 		} catch (err) {}
 	}
 </script>
@@ -22,17 +21,9 @@
 <Page>
 	<Main>
 		<div id="wrapper">
-			<h1>Recadastre-se</h1>
+			<h1>Cadastre-se</h1>
 			<form>
-				<Textfield variant="outlined" bind:value={name} label="Nome" required />
 				<Textfield variant="outlined" bind:value={email} type="email" label="Email" required />
-				<Textfield
-					variant="outlined"
-					bind:value={password}
-					type="password"
-					label="Senha"
-					required
-				/>
 				<Button variant="outlined" on:click={submit}>Cadastrar</Button>
 			</form>
 		</div>
